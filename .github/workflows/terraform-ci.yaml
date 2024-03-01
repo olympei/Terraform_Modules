@@ -1,16 +1,14 @@
-name: Terraform CI/CD for VPC
+name: Terraform CI/CD for Modules on Pull Request Closure
 
 on:
- push:
-    branches:
-      - main
  pull_request:
     types:
       - closed
 
 jobs:
- plan-apply:
+ terraform:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     container:
       image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -24,71 +22,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Terraform Init & Plan
+      - name: Run Terraform for each module
         run: |
-          cd Infra/vpc
-          terraform init -input=false
-          terraform plan -out=tfplan
-
- apply:
-    needs: plan-apply
-    runs-on: ubuntu-latest
-    container:
-      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Terraform Apply
-        run: |
-          cd Infra/vpc
-          terraform apply -auto-approve tfplan
-
- plan-destroy:
-    needs: apply
-    runs-on: ubuntu-latest
-    container:
-      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Terraform Plan Destroy
-        run: |
-          cd Infra/vpc
-          terraform plan -destroy
-
- destroy:
-    needs: plan-destroy
-    runs-on: ubuntu-latest
-    container:
-      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Terraform Destroy
-        run: |
-          cd Infra/vpc
-          terraform apply -auto-approve
+          for module in Infra/*/; do
+            echo "Processing module: $module"
+            cd $module
+            terraform init -input=false
+            terraform plan -out=tfplan
+            terraform apply -auto-approve tfplan
+            cd -
+          done
