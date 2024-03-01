@@ -24,14 +24,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set Terraform configuration path for VPC
-        run: echo "TF_CONFIG_PATH_VPC=Infra/vpc/" >> $GITHUB_ENV
-
-      - name: Change directory to Terraform module VPC
-        run: cd $TF_CONFIG_PATH_VPC
-
       - name: Terraform Init & Plan
         run: |
+          cd Infra/vpc
           terraform init -input=false
           terraform plan -out=tfplan
 
@@ -51,14 +46,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set Terraform configuration path for VPC
-        run: echo "TF_CONFIG_PATH_VPC=Infra/vpc/" >> $GITHUB_ENV
-
-      - name: Change directory to Terraform module VPC
-        run: cd $TF_CONFIG_PATH_VPC
-
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: |
+          cd Infra/vpc
+          terraform apply -auto-approve tfplan
 
  plan-destroy:
     needs: apply
@@ -76,14 +67,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set Terraform configuration path for VPC
-        run: echo "TF_CONFIG_PATH_VPC=Infra/vpc/" >> $GITHUB_ENV
-
-      - name: Change directory to Terraform module VPC
-        run: cd $TF_CONFIG_PATH_VPC
-
       - name: Terraform Plan Destroy
-        run: terraform plan -destroy
+        run: |
+          cd Infra/vpc
+          terraform plan -destroy
 
  destroy:
     needs: plan-destroy
@@ -101,11 +88,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set Terraform configuration path for VPC
-        run: echo "TF_CONFIG_PATH_VPC=Infra/vpc/" >> $GITHUB_ENV
-
-      - name: Change directory to Terraform module VPC
-        run: cd $TF_CONFIG_PATH_VPC
-
       - name: Terraform Destroy
-        run: terraform apply -auto-approve
+        run: |
+          cd Infra/vpc
+          terraform apply -auto-approve
