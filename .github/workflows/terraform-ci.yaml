@@ -1,22 +1,21 @@
-name: Terraform CI/CD
+name: Terraform CI/CD for VPC
 
 on:
+ push:
+    branches:
+      - main
  pull_request:
-    types: [closed]
+    types:
+      - closed
 
 jobs:
- terraform:
-    name: Terraform
+ plan-apply:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    container:
+      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.0.0
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -25,14 +24,88 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
-      - name: Change directory to Terraform module
-        run: cd Infra/vpc
+      - name: Set Terraform configuration path for VPC
+        run: echo "TF_CONFIG_PATH_VPC=/Infra/vpc" >> $GITHUB_ENV
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Change directory to Terraform module VPC
+        run: cd $TF_CONFIG_PATH_VPC
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: Terraform Init & Plan
+        run: |
+          terraform init -input=false
+          terraform plan -out=tfplan
+
+ apply:
+    needs: plan-apply
+    runs-on: ubuntu-latest
+    container:
+      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Set Terraform configuration path for VPC
+        run: echo "TF_CONFIG_PATH_VPC=/Infra/vpc" >> $GITHUB_ENV
+
+      - name: Change directory to Terraform module VPC
+        run: cd $TF_CONFIG_PATH_VPC
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
+
+ plan-destroy:
+    needs: apply
+    runs-on: ubuntu-latest
+    container:
+      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Set Terraform configuration path for VPC
+        run: echo "TF_CONFIG_PATH_VPC=/Infra/vpc" >> $GITHUB_ENV
+
+      - name: Change directory to Terraform module VPC
+        run: cd $TF_CONFIG_PATH_VPC
+
+      - name: Terraform Plan Destroy
+        run: terraform plan -destroy
+
+ destroy:
+    needs: plan-destroy
+    runs-on: ubuntu-latest
+    container:
+      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Set Terraform configuration path for VPC
+        run: echo "TF_CONFIG_PATH_VPC=/Infra/vpc" >> $GITHUB_ENV
+
+      - name: Change directory to Terraform module VPC
+        run: cd $TF_CONFIG_PATH_VPC
+
+      - name: Terraform Destroy
+        run: terraform apply -auto-approve
