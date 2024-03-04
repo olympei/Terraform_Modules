@@ -37,5 +37,5 @@ jobs:
 
       - name: Terraform Apply
         run: |
-          cd ,/Infra/vpc
+          cd ./Infra/vpc
           terraform apply -auto-approve 
