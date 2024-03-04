@@ -21,8 +21,7 @@ jobs:
           cd ./Infra/vpc
           terraform init
           terraform plan
-        env:
-          TERRAFORM_CLI_PATH: /home/runner/work/_temp/89705778-25f8-46a8-8165-65f896e72a6a
+
  terraform_deploy:
     needs: terraform_plan
     runs-on: ubuntu-latest
