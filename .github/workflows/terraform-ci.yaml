@@ -1,34 +1,40 @@
-name: Terraform CI/CD for Modules on Pull Request Closure
+name: Terraform CI/CD
 
 on:
  pull_request:
-    types:
-      - closed
+    types: [closed]
 
 jobs:
- terraform:
+ terraform_plan:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-    container:
-      image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          ref: main
 
-      - name: Run Terraform for each module
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init and Plan
         run: |
-          for module in Infra/*/; do
-            echo "Processing module: $module"
-            cd $module
-            terraform init -input=false
-            terraform plan -out=tfplan
-            terraform apply -auto-approve tfplan
-            cd -
-          done
+          cd ./Infra/vpc
+          terraform init
+          terraform plan
+ terraform_deploy:
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: main
+        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Apply
+        run: |
+          cd ,/Infra/vpc
+          terraform apply -auto-approve 
