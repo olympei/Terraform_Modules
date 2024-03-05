@@ -18,8 +18,8 @@ jobs:
 
       - name: Terraform Init and Plan
         run: |
-          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
-          export AWS_SECRET_ACCESS_KEY="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"
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           terraform -version
           ls 
           pwd
@@ -41,8 +41,8 @@ jobs:
 
       - name: Terraform Apply
         run: |
-          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
-          export AWS_SECRET_ACCESS_KEY="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"
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cd ./Infra/vpc
           terraform init && terraform apply -auto-approve 
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Terraform Destroy
         run: |
-          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
-          export AWS_SECRET_ACCESS_KEY="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"
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cd ./Infra/vpc
           terraform init && terraform destroy -auto-approve
