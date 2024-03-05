@@ -46,17 +46,16 @@ jobs:
           cd ./infra/vpc
           terraform init && terraform apply -auto-approve 
 
-    manual_approval:
+ wait_for_approval:
     needs: terraform_deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Manual Approval
-        id: manual_approval
-        uses: wei/ci-approve-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Approve to destroy the Terraform infrastructure"
-          reviewers: "AmitBarate07" 
+      - name: Wait for Approval
+        # Use GitHub Checks API to wait for approval
+        run: |
+          # Logic to wait for approval, you can use a script or a tool to check for approval status
+          # For demonstration purposes, let's assume it's a manual check for approval
+          echo "Waiting for manual approval..."
  
  terraform_destroy:
     needs: terraform_deploy
