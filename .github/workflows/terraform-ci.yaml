@@ -18,6 +18,11 @@ jobs:
 
       - name: Terraform Init and Plan
         run: |
+          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
+          export AWS_SECRET_ACCESS_KEY="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"
+          terraform -version
+          ls 
+          pwd
           cd ./Infra/vpc
           terraform init
           terraform plan
@@ -30,12 +35,32 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: main
-        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Apply
         run: |
+          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
+          export AWS_SECRET_ACCESS_KEY="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"
           cd ./Infra/vpc
-          terraform apply -auto-approve 
+          terraform init && terraform apply -auto-approve 
+
+ terraform_destroy:
+    needs: terraform_deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Destroy
+        run: |
+          export AWS_ACCESS_KEY_ID="AKIAZKGM5DUWII46KHCV"
+          export AWS_SECRET_ACCESS_KEY="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"
+          cd ./Infra/vpc
+          terraform init && terraform destroy -auto-approve
