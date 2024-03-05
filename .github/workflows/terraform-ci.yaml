@@ -41,53 +41,5 @@ jobs:
           export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cd ./Infra/vpc
+          terraform init
           terraform apply -auto-approve
-
- hold-destroy:
-    needs: terraform_apply
-    runs-on: ubuntu-latest
-    steps:
-      - name: Hold Destroy
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const { owner, repo } = context.repo
-            const issue_number = context.issue.number
-            const token = process.env.GITHUB_TOKEN
-            const octokit = github.getOctokit(token)
-            const issue = await octokit.issues.createComment({
-              owner,
-              repo,
-              issue_number,
-              body: "Please confirm if you want to destroy all infrastructure. Type 'yes' to proceed."
-            })
-            const { data: comments } = await octokit.issues.listComments({
-              owner,
-              repo,
-              issue_number
-            })
-            const lastComment = comments[comments.length - 1]
-            if (lastComment.body.toLowerCase() === 'yes') {
-              core.setOutput('confirm', 'yes')
-            } else {
-              core.setOutput('confirm', 'no')
-            }
-
- terraform_destroy:
-    needs: hold-destroy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: main
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform Destroy
-        run: |
-          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          cd ./Infra/vpc
-          terraform destroy -auto-approve
