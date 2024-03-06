@@ -39,8 +39,8 @@ jobs:
           pwd && ls -la
           
           echo "launching alb "
-          cd ./infra/alb
           aws s3 cp s3://terra-bct/ec2-key/terraform-key.pem ./infra/alb/
+          cd ./infra/alb
           terraform init && terraform plan          
                   
 
