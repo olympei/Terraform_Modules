@@ -20,9 +20,15 @@ jobs:
         run: |
           export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          cd ./Infra/vpc
-          terraform init
-          terraform plan
+          echo "launching vpc "
+          cd ./infra/vpc
+          terraform init && terraform plan
+          
+          
+          echo "launching ec2 "
+          cd ./infra/ec2
+          terraform init && terraform plan  
+                  
 
  terraform_apply:
     needs: terraform_init_plan
@@ -40,6 +46,9 @@ jobs:
         run: |
           export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          cd ./Infra/vpc
-          terraform init
-          terraform apply -auto-approve
+          cd ./infra/vpc
+          terraform init && terraform apply -auto-approve
+          
+          cd ./infra/ec2
+          terraform init && terraform apply -auto-approve
+          
