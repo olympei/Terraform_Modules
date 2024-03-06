@@ -18,4 +18,9 @@ variable "private_server_instance_type" {
   
 }
 
-
+# ec2 instance key name
+variable key_name {
+  type        = string
+  default     = ""
+  description = "The key name"
+}
