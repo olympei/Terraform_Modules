@@ -17,3 +17,5 @@ variable "private_server_instance_type" {
   default = ""
   
 }
+
+

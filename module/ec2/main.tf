@@ -149,7 +149,7 @@ resource "aws_instance" "ec2_private" {
   ami                         = "ami-0cf10cdf9fcd62d37"
   associate_public_ip_address = false
   instance_type               = var.private_server_instance_type
-  key_name                    = var.key_name
+  key_name                    = aws_key_pair.ec2_key.key_name
   subnet_id                   = data.aws_subnet.private-subnet-ec2.id
   security_groups = [aws_security_group.ec2_private_sg.id]
 
