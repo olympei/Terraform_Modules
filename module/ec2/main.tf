@@ -59,7 +59,7 @@ resource "aws_instance" "public_server" {
   ami           = "ami-0cf10cdf9fcd62d37"
   instance_type = var.instance_type
   associate_public_ip_address = true
-  key_name      = aws_key_pair.ec2_key.key_name
+  key_name      = var.key_name
   subnet_id     = data.aws_subnet.public_subnet-1.id
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
   security_groups = [aws_security_group.ec2_public_sg.id]
@@ -149,7 +149,7 @@ resource "aws_instance" "ec2_private" {
   ami                         = "ami-0cf10cdf9fcd62d37"
   associate_public_ip_address = false
   instance_type               = var.private_server_instance_type
-  key_name                    = aws_key_pair.ec2_key.key_name
+  key_name                    = var.key_name
   subnet_id                   = data.aws_subnet.private-subnet-ec2.id
   security_groups = [aws_security_group.ec2_private_sg.id]
   
@@ -197,18 +197,18 @@ resource "aws_vpc_security_group_egress_rule" "outbount_traffic" {
 #---------------------------------------------------------------------------------------------------------
 # Create a key pair for the EC2 instance
 #----------------------------------------------------------------------------------------------------------
-resource "aws_key_pair" "ec2_key" {
-  key_name   = "${var.namespace}-key"  # Specify the name of the key pair
-  public_key = tls_private_key.ec2_key.public_key_openssh  # Provide the path to the public key file
-}
+# resource "aws_key_pair" "ec2_key" {
+#   key_name   = "${var.namespace}-key"  # Specify the name of the key pair
+#   public_key = tls_private_key.ec2_key.public_key_openssh  # Provide the path to the public key file
+# }
 
-resource "tls_private_key" "ec2_key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+# resource "tls_private_key" "ec2_key" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
 
-resource "local_file" "private_key" {
-  filename          = "${var.namespace}-key.pem"
-  content           = tls_private_key.ec2_key.private_key_pem
-  file_permission   = "0400"
-}
+# resource "local_file" "private_key" {
+#   filename          = "${var.namespace}-key.pem"
+#   content           = tls_private_key.ec2_key.private_key_pem
+#   file_permission   = "0400"
+# }
