@@ -23,6 +23,8 @@ jobs:
           echo "launching vpc "
           cd ./infra/vpc
           terraform init && terraform plan
+          cd ../..
+          pwd && ls -la
           
           
           echo "launching ec2 "
@@ -48,7 +50,10 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cd ./infra/vpc
           terraform init && terraform apply -auto-approve
+          cd ../..
+          pwd && ls -la
           
           cd ./infra/ec2
+          pwd && ls -la
           terraform init && terraform apply -auto-approve
           
