@@ -157,6 +157,8 @@ resource "aws_instance" "ec2_private" {
     "Name" = "${var.namespace}_private"
   }
 
+
+
 } 
 
 # # Create security group for private ec2
