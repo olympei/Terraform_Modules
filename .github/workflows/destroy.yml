@@ -30,7 +30,9 @@ jobs:
           cd ./infra/ec2
           pwd && ls -la
           terraform init && terraform destroy -auto-approve
-                  
+          cd ../..
+          pwd && ls -la
+          
           cd ./infra/vpc
           terraform init && terraform destroy -auto-approve
           cd ../..
