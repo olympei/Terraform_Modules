@@ -1,3 +1,4 @@
+# data source for public subnet
 data "aws_subnet" "public_subnet-1" {
   
   filter {
@@ -9,6 +10,7 @@ values = ["public_subnet-1"]
 }
 }
 
+# # data source for private subnet
 data "aws_subnet" "private-subnet-ec2" {
   
   filter {
@@ -20,6 +22,7 @@ values = ["private_subnet-1"]
 }
 }
 
+# data source for vpc
 data "aws_vpc" "main-vpc" {
   
   filter {
