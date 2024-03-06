@@ -1,25 +1,17 @@
-
-
+# The namespace to use for tagging resources
 variable "namespace" {
   description = "The namespace to use for tagging resources"
   type        = string
-  default     = null
+  default     = ""
 }
-# Define variable for EC2 instance type
+# Define variable for public EC2 instance type
 variable "instance_type" {
   description = "The type of EC2 instance to launch"
   type        = string
-  default     = null 
+  default     = "" # Default instance type is t2.micro
 }
 
-
-variable "key_name" {
-  description = "Name of the key pair used for the EC2 instance"
-  type        = string
-  default     = ""  # Provide a default value if needed
-}
-
-
+# Define variable for private EC2 instance type
 variable "private_server_instance_type" {
   type = string
   default = ""
