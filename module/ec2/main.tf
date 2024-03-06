@@ -143,7 +143,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_outbound_traffic" {
 }
  
 #---------------------------------------------------------------------------------------------------------- 
-# Create EC2 instance in a private subnet
+# Create EC2 instance in a private subnet ##
 #----------------------------------------------------------------------------------------------------------
 resource "aws_instance" "ec2_private" {
   ami                         = "ami-0cf10cdf9fcd62d37"
@@ -152,7 +152,7 @@ resource "aws_instance" "ec2_private" {
   key_name                    = aws_key_pair.ec2_key.key_name
   subnet_id                   = data.aws_subnet.private-subnet-ec2.id
   security_groups = [aws_security_group.ec2_private_sg.id]
-
+  
   tags = {
     "Name" = "${var.namespace}_private"
   }
