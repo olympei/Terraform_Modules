@@ -89,7 +89,7 @@ user_data = <<-EOF
     ./mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/
 
     # Set up the cron job
-    (crontab -l ; echo "*/5     /aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron") | crontab -
+    (crontab -l ; echo "*/5 * * * * /aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron") | crontab -
   EOF
 
   
