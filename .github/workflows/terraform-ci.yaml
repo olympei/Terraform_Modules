@@ -46,8 +46,14 @@ jobs:
           echo "launching alb "
           cd ./infra/alb
           ls -la
-          terraform init && terraform plan && terraform apply -auto-approve        
-                  
+          terraform init && terraform plan && terraform apply -auto-approve  
+          cd ../..      
+
+          echo "launching sns topic "
+          cd ./infra/sns
+          ls -la
+          terraform init && terraform plan && terraform apply -auto-approve  
+          # cd ../..              
 #########################################################################################
 #  terraform_apply:
 #     needs: terraform_init_plan

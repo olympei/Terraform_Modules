@@ -44,4 +44,6 @@ jobs:
           cd ../..
           pwd && ls -la
 
-
+          
+          cd ./infra/sns
+          terraform init && terraform destroy -auto-approve
