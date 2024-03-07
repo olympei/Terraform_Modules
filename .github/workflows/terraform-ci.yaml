@@ -19,8 +19,9 @@ jobs:
       - name: Copy SSH key from S3 bucket
         run: |
           set -x
-          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region us-east-1
           aws --version
           aws s3 ls  
           aws s3 cp s3://terra-bct/ec2-key/terraform-key.pem ./infra/alb/
