@@ -45,7 +45,7 @@ jobs:
           aws s3 cp s3://terra-bct/ec2-key/terraform-key.pem .
           terraform init && terraform plan && terraform apply -auto-approve        
                   
-
+##
 #  terraform_apply:
 #     needs: terraform_init_plan
 #     runs-on: ubuntu-latest
