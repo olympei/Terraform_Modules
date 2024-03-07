@@ -40,6 +40,8 @@ jobs:
           
           echo "launching alb "
           cd ./infra/alb
+          aws --version
+          aws s3 ls
           aws s3 cp s3://terra-bct/ec2-key/terraform-key.pem .
           terraform init && terraform plan && terraform apply -auto-approve        
                   
