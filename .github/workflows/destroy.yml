@@ -47,3 +47,10 @@ jobs:
           
           cd ./infra/sns
           terraform init && terraform destroy -auto-approve
+          cd ../..
+          pwd 
+
+          cd ./infra/cloudwatch
+          pwd && ls -la
+          terraform init && terraform destroy -auto-approve           
+          
