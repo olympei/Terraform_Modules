@@ -58,7 +58,13 @@ jobs:
           echo "launching cloudwatch "
           cd ./infra/cloudwatch
           ls -la
-          terraform init && terraform plan && terraform apply -auto-approve  
+          terraform init && terraform plan && terraform apply -auto-approve 
+          cd ../..           
+
+          echo "launching s3 "
+          cd ./infra/s3
+          ls -la
+          terraform init && terraform plan && terraform apply -auto-approve 
 
 #########################################################################################
 #  terraform_apply:
