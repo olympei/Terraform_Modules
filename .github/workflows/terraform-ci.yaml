@@ -65,6 +65,12 @@ jobs:
           cd ./infra/s3
           ls -la
           terraform init && terraform plan && terraform apply -auto-approve 
+          cd ../..          
+
+          echo "launching cloudfront "
+          cd ./infra/cloudfront
+          ls -la
+          terraform init && terraform plan && terraform apply -auto-approve          
 
 #########################################################################################
 #  terraform_apply:
