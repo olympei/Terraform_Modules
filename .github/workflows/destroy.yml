@@ -54,13 +54,15 @@ jobs:
           cd ../..
           pwd 
 
+          cd ./infra/cloudfront
+          terraform init && terraform destroy -auto-approve
+          cd ../..
+          pwd 
+
           cd ./infra/s3
           terraform init && terraform destroy -auto-approve
           cd ../..
           pwd  
           
+
           
-          cd ./infra/cloudfront
-          terraform init && terraform destroy -auto-approve
-          cd ../..
-          pwd           
