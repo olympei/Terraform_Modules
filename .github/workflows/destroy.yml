@@ -64,5 +64,6 @@ jobs:
           cd ../..
           pwd  
           
-
+          cd ./infra/acm
+          terraform init && terraform destroy -auto-approve
           
