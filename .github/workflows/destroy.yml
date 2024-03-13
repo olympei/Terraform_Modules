@@ -39,6 +39,12 @@ jobs:
           cd ../..
           pwd && ls -la
           
+          cd ./infra/rds
+          pwd && ls -la
+          terraform init && terraform destroy -auto-approve
+          cd ../..
+          pwd && ls -la
+
           cd ./infra/vpc
           terraform init && terraform destroy -auto-approve
           cd ../..

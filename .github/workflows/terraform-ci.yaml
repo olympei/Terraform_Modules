@@ -78,7 +78,10 @@ jobs:
           ls -la
           terraform init && terraform plan && terraform apply -auto-approve          
 
-
+          echo "launching rds "
+          cd ./infra/rds
+          ls -la
+          terraform init && terraform plan && terraform apply -auto-approve 
 #########################################################################################
 #  terraform_apply:
 #     needs: terraform_init_plan
