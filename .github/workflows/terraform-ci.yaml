@@ -70,7 +70,14 @@ jobs:
           echo "launching cloudfront "
           cd ./infra/cloudfront
           ls -la
+          terraform init && terraform plan && terraform apply -auto-approve     
+          cd ../..
+
+          echo "launching acm "
+          cd ./infra/acm
+          ls -la
           terraform init && terraform plan && terraform apply -auto-approve          
+
 
 #########################################################################################
 #  terraform_apply:
