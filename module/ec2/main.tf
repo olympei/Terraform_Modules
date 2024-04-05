@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "describe_ec2_policy" {
 
 # Create EC2 instance
 resource "aws_instance" "public_server" {
-  ami           = "ami-0cf10cdf9fcd62d37"
+  ami           = "ami-00cda30cf72311684"
   instance_type = var.instance_type
   associate_public_ip_address = true
   key_name      = var.key_name
@@ -146,7 +146,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_outbound_traffic" {
 # Create EC2 instance in a private subnet ##
 #----------------------------------------------------------------------------------------------------------
 resource "aws_instance" "ec2_private" {
-  ami                         = "ami-0cf10cdf9fcd62d37"
+  ami                         = "ami-00cda30cf72311684"
   associate_public_ip_address = false
   instance_type               = var.private_server_instance_type
   key_name                    = var.key_name
