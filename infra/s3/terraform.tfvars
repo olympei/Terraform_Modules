@@ -1,5 +1,5 @@
 # store variable definitions
-bucket = "test-sourceee-bucketttttttttt"
+bucket = "test-sourceee-bucket-111777"
 tag_name = "source_bucket"
 # destination_bucket = "test-destinationnnn-buckettttttttttt"
 # storage_class = "STANDARD"
